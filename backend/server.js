@@ -1,23 +1,31 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import connectDB from './config/db.js';
 
 // Load environment variables
 dotenv.config();
 
+// Connect to MongoDB Atlas
+connectDB();
+
 // Route imports
 import uploadRoutes from './routes/uploadRoutes.js';
+import parseRoutes from './routes/parseRoutes.js';
+import projectRoutes from './routes/projectRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ─── Global Middleware ────────────────────────────────────────────────────────
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // Allow large parsed content in body
 app.use(express.urlencoded({ extended: true }));
 
 // ─── API Routes ───────────────────────────────────────────────────────────────
 app.use('/api/v1/upload', uploadRoutes);
+app.use('/api/v1/parse', parseRoutes);
+app.use('/api/v1/projects', projectRoutes);
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/api/v1/health', (req, res) => {
@@ -51,8 +59,11 @@ app.use((err, req, res, next) => {
 // ─── Start Server ─────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`\n🚀 SyntaxOut server running in ${process.env.NODE_ENV} mode`);
-  console.log(`   → Local:  http://localhost:${PORT}`);
-  console.log(`   → Health: http://localhost:${PORT}/api/v1/health\n`);
+  console.log(`   → Local:    http://localhost:${PORT}`);
+  console.log(`   → Health:   http://localhost:${PORT}/api/v1/health`);
+  console.log(`   → Upload:   POST http://localhost:${PORT}/api/v1/upload`);
+  console.log(`   → Parse:    POST http://localhost:${PORT}/api/v1/parse`);
+  console.log(`   → Projects: GET  http://localhost:${PORT}/api/v1/projects\n`);
 });
 
 export default app;
