@@ -18,21 +18,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ─── Global Middleware ────────────────────────────────────────────────────────
-const allowedOrigins = [
-  'http://localhost:5173',                   // Vite local dev
-  'http://localhost:4173',                   // Vite preview
-  process.env.FRONTEND_URL,                 // Vercel production URL
-].filter(Boolean);
-
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (e.g. curl, Postman, sendBeacon)
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-    callback(new Error(`CORS: origin ${origin} not allowed`));
-  },
-  credentials: true,
-}));
-app.use(express.json({ limit: '10mb' })); // Allow large parsed content in body
+app.use(cors()); // Open CORS — data isolation is handled by clientId per session
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // ─── API Routes ───────────────────────────────────────────────────────────────
