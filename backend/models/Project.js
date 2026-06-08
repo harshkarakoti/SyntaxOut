@@ -12,6 +12,12 @@ const projectSchema = new mongoose.Schema(
       trim: true,
       maxlength: [100, 'Project name cannot exceed 100 characters'],
     },
+    clientId: {
+      type: String,
+      required: true,
+      index: true, // fast filter by user
+      trim: true,
+    },
     description: {
       type: String,
       trim: true,
@@ -57,6 +63,12 @@ projectSchema.virtual('modules', {
   localField: '_id',
   foreignField: 'projectId',
 });
+
+// ─── TTL Safety Net ───────────────────────────────────────────────────────────
+// Auto-delete projects after 24 hours in case the browser's sendBeacon
+// cleanup call failed (e.g. network error, browser crash, hard power-off).
+// This guarantees the database never accumulates stale session data.
+projectSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 }); // 24 hours
 
 const Project = mongoose.model('Project', projectSchema);
 export default Project;

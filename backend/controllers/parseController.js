@@ -14,9 +14,15 @@ import Module from '../models/Module.js';
  */
 export const parseFiles = async (req, res, next) => {
   try {
-    const { files, projectName } = req.body;
+    const { files, projectName, clientId } = req.body;
 
     // ── Input Validation ───────────────────────────────────────────────────────
+    if (!clientId || typeof clientId !== 'string' || clientId.trim().length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: 'A valid clientId is required. Generate one in the browser and send it with every request.',
+      });
+    }
     if (!files || !Array.isArray(files) || files.length === 0) {
       return res.status(400).json({
         success: false,
@@ -43,6 +49,7 @@ export const parseFiles = async (req, res, next) => {
     // ── Step 1: Create Project document (status: processing) ──────────────────
     const project = await Project.create({
       name: projectName || `Project ${new Date().toLocaleDateString('en-IN')} — ${files.length} file(s)`,
+      clientId: clientId.trim(),
       fileCount: files.length,
       status: 'processing',
     });
