@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  @apply font-sans antialiased;
+  background-color: #050a14;
+  color: #e2e8f0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── Dot Grid Background ───────────────────────────────────────────────────── */
+.bg-dots {
+  background-image: radial-gradient(circle, rgba(0,212,255,0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ─── Ambient Glow Orbs ─────────────────────────────────────────────────────── */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+.orb-cyan  { background: rgba(0, 212, 255, 0.18); width: 600px; height: 600px; top: -200px; left: 30%; }
+.orb-pink  { background: rgba(255, 0, 128, 0.12); width: 500px; height: 500px; top: 40%; right: -100px; }
+.orb-purple{ background: rgba(121, 40, 202, 0.15); width: 500px; height: 500px; bottom: -100px; left: -100px; }
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #050a14; }
+::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,212,255,0.4); }
+
+/* ─── Gradient Border Card ──────────────────────────────────────────────────── */
+.card {
+  position: relative;
+  background: rgba(10, 22, 40, 0.8);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0,212,255,0.3), rgba(121,40,202,0.2), rgba(255,0,128,0.1));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.card:hover::before {
+  background: linear-gradient(135deg, rgba(0,212,255,0.6), rgba(121,40,202,0.4), rgba(255,0,128,0.25));
+}
+
+.card-plain {
+  background: rgba(10, 22, 40, 0.6);
+  border: 1px solid rgba(0,212,255,0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.2s;
+}
+.card-plain:hover { border-color: rgba(0,212,255,0.2); }
+
+/* ─── Glow Text ─────────────────────────────────────────────────────────────── */
+.text-glow-cyan {
+  background: linear-gradient(135deg, #00d4ff, #7928ca 60%, #ff0080);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────────────── */
+.btn-primary {
+  position: relative;
+  background: linear-gradient(135deg, #00d4ff, #0080a0);
+  color: #050a14;
+  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 20px rgba(0,212,255,0.3), 0 4px 15px rgba(0,0,0,0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 35px rgba(0,212,255,0.5), 0 8px 25px rgba(0,0,0,0.4);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  background: rgba(10,22,40,0.8);
+  color: rgba(0,212,255,0.9);
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,212,255,0.25);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+.btn-secondary:hover {
+  background: rgba(0,212,255,0.08);
+  border-color: rgba(0,212,255,0.5);
+  box-shadow: 0 0 15px rgba(0,212,255,0.2);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: rgba(226,232,240,0.6);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+.btn-ghost:hover { background: rgba(0,212,255,0.06); color: #e2e8f0; }
+
+/* ─── Terminal Drop Zone ─────────────────────────────────────────────────────── */
+.drop-zone {
+  position: relative;
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 20px;
+  background: rgba(5,10,20,0.9);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.drop-zone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,212,255,0.015) 2px,
+    rgba(0,212,255,0.015) 4px
+  );
+  pointer-events: none;
+}
+.drop-zone:hover, .drop-zone.active {
+  border-color: rgba(0,212,255,0.5);
+  background: rgba(0,212,255,0.04);
+  box-shadow: 0 0 30px rgba(0,212,255,0.1), inset 0 0 30px rgba(0,212,255,0.03);
+}
+
+/* ─── Shimmer ───────────────────────────────────────────────────────────────── */
+.shimmer {
+  background: linear-gradient(90deg, rgba(10,22,40,0.4) 25%, rgba(0,212,255,0.06) 50%, rgba(10,22,40,0.4) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+/* ─── HTTP Badges ───────────────────────────────────────────────────────────── */
+.badge { display: inline-flex; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; }
+
+/* ─── Code Block ─────────────────────────────────────────────────────────────── */
+.code-block { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; background: #020810; border-radius: 16px; border: 1px solid rgba(0,212,255,0.08); }
+
+/* ─── Section collapsible ───────────────────────────────────────────────────── */
+.schema-section { border: 1px solid rgba(0,212,255,0.08); border-radius: 12px; overflow: hidden; }
+.schema-section-header { background: rgba(0,212,255,0.04); }
+.schema-section-header:hover { background: rgba(0,212,255,0.08); }
+
+/* ─── Noise texture overlay ─────────────────────────────────────────────────── */
+.noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
