@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { UploadCloud, FileCode, X, CheckCircle, AlertCircle, Loader2, Terminal } from 'lucide-react';
+import { UploadCloud, FileCode, X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 const ALLOWED_EXT = ['.js','.jsx','.ts','.tsx','.py','.go','.java','.cpp','.cs','.rb','.php'];
 
@@ -32,19 +32,19 @@ export default function UploadZone({ onUploadComplete }) {
     if (!files.length) return;
     setStatus('uploading'); setError('');
     try {
-      setProgress('Uploading files to memory buffer...');
+      setProgress('Uploading...');
       const formData = new FormData();
       files.forEach((f) => formData.append('files', f));
       const { default: api, parseFiles } = await import('../services/api.js');
       const uploadRes = await api.post('/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
 
-      setProgress('Sending to Gemini 2.5 Flash AI...');
+      setProgress('Analysing with Gemini...');
       const parseRes = await parseFiles({
         files: uploadRes.data.files,
         projectName: files.map((f) => f.name).join(', ').slice(0, 80),
       });
 
-      setProgress('Saving to database...');
+      setProgress('Done');
       setStatus('success');
       onUploadComplete(parseRes.data.meta.projectId);
     } catch (err) {
@@ -54,70 +54,51 @@ export default function UploadZone({ onUploadComplete }) {
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '680px', margin: '0 auto' }}>
-
-      {/* Terminal-style header bar */}
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: '8px',
-        padding: '10px 16px',
-        background: 'rgba(0,212,255,0.04)',
-        border: '1px solid rgba(0,212,255,0.12)',
-        borderBottom: 'none',
-        borderRadius: '16px 16px 0 0',
-      }}>
-        <div style={{ display: 'flex', gap: '6px' }}>
-          {['#ff5f57','#ffbd2e','#28ca41'].map(c => (
-            <div key={c} style={{ width: '11px', height: '11px', borderRadius: '50%', background: c, opacity: 0.8 }} />
-          ))}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px',
-          marginLeft: '8px', color: 'rgba(0,212,255,0.5)', fontSize: '12px', fontFamily: 'JetBrains Mono' }}>
-          <Terminal size={12} />
-          syntaxout — file ingestion pipeline
-        </div>
-      </div>
+    <div style={{ width: '100%' }}>
 
       {/* Drop Zone */}
       <div
         onDrop={onDrop}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
-        onClick={() => !status || status === 'error' ? document.getElementById('so-file-input').click() : null}
+        onClick={() => (!status || status === 'error') && document.getElementById('so-file-input').click()}
         className={`drop-zone ${isDragging ? 'active' : ''}`}
-        style={{ padding: '48px 32px', textAlign: 'center', borderRadius: '0 0 16px 16px',
-          borderTop: 'none' }}>
-
-        <input id="so-file-input" type="file" multiple accept={ALLOWED_EXT.join(',')}
+        style={{ padding: '40px 24px', textAlign: 'center' }}
+      >
+        <input
+          id="so-file-input" type="file" multiple
+          accept={ALLOWED_EXT.join(',')}
           style={{ display: 'none' }}
-          onChange={(e) => { setError(''); validateAndAdd(e.target.files); }} />
+          onChange={(e) => { setError(''); validateAndAdd(e.target.files); }}
+        />
 
-        {/* Icon */}
         <div style={{
-          width: '72px', height: '72px', borderRadius: '18px', margin: '0 auto 20px',
+          width: '40px', height: '40px', borderRadius: '8px',
+          background: '#1e1e1e', border: '1px solid #2a2a2a',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: isDragging ? 'rgba(0,212,255,0.15)' : 'rgba(0,212,255,0.06)',
-          border: `1px solid ${isDragging ? 'rgba(0,212,255,0.5)' : 'rgba(0,212,255,0.15)'}`,
-          boxShadow: isDragging ? '0 0 30px rgba(0,212,255,0.2)' : 'none',
-          transition: 'all 0.3s',
+          margin: '0 auto 14px',
         }}>
-          <UploadCloud size={30} color={isDragging ? '#00d4ff' : 'rgba(0,212,255,0.6)'}
-            style={{ filter: isDragging ? 'drop-shadow(0 0 8px #00d4ff)' : 'none', transition: 'all 0.3s' }} />
+          <UploadCloud size={18} color={isDragging ? '#e8e8e8' : '#606060'} />
         </div>
 
-        <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#e2e8f0', marginBottom: '8px' }}>
-          {isDragging ? '⚡ Release to ingest files' : 'Drop your source files here'}
-        </h3>
-        <p style={{ fontSize: '13px', color: 'rgba(226,232,240,0.4)', marginBottom: '20px' }}>
-          or click to browse · up to 10 files · 2MB each
+        <p style={{ fontSize: '14px', fontWeight: 500, color: '#e8e8e8', marginBottom: '4px' }}>
+          {isDragging ? 'Release to add files' : 'Drop files here, or click to browse'}
+        </p>
+        <p style={{ fontSize: '12px', color: '#525252' }}>
+          Up to 10 files · 2 MB each
         </p>
 
         {/* Supported extensions */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '6px' }}>
+        <div style={{
+          display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
+          gap: '5px', marginTop: '16px',
+        }}>
           {ALLOWED_EXT.map((ext) => (
             <span key={ext} style={{
-              fontSize: '11px', fontFamily: 'JetBrains Mono', padding: '3px 8px', borderRadius: '6px',
-              background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.1)',
-              color: 'rgba(0,212,255,0.5)',
+              fontSize: '11px', fontFamily: 'var(--mono)',
+              padding: '2px 7px', borderRadius: '4px',
+              background: '#161616', border: '1px solid #252525',
+              color: '#525252',
             }}>{ext}</span>
           ))}
         </div>
@@ -125,40 +106,49 @@ export default function UploadZone({ onUploadComplete }) {
 
       {/* Error */}
       {error && (
-        <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px',
-          color: '#ff4da6', fontSize: '13px' }}>
-          <AlertCircle size={14} /> {error}
+        <div style={{
+          marginTop: '10px', display: 'flex', alignItems: 'center', gap: '6px',
+          color: '#c0392b', fontSize: '12px',
+        }}>
+          <AlertCircle size={13} /> {error}
         </div>
       )}
 
       {/* File list */}
       {files.length > 0 && (
-        <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}
+        <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '4px' }}
           className="animate-fade-in">
           {files.map((file) => (
-            <div key={file.name} className="card-plain" style={{
-              padding: '10px 14px', display: 'flex', alignItems: 'center',
-              justifyContent: 'space-between', gap: '12px',
+            <div key={file.name} style={{
+              padding: '9px 12px',
+              background: '#161616',
+              border: '1px solid #222',
+              borderRadius: '7px',
+              display: 'flex', alignItems: 'center',
+              justifyContent: 'space-between', gap: '10px',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', flexShrink: 0,
-                  background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.12)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <FileCode size={14} color="#00d4ff" />
-                </div>
-                <div style={{ minWidth: 0 }}>
-                  <p style={{ fontSize: '13px', fontWeight: 600, color: '#e2e8f0',
-                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {file.name}
-                  </p>
-                  <p style={{ fontSize: '11px', color: 'rgba(226,232,240,0.35)', fontFamily: 'JetBrains Mono' }}>
-                    {(file.size / 1024).toFixed(1)} KB
-                  </p>
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                <FileCode size={13} color="#606060" style={{ flexShrink: 0 }} />
+                <span style={{
+                  fontSize: '13px', fontWeight: 500, color: '#e8e8e8',
+                  whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                  fontFamily: 'var(--mono)',
+                }}>{file.name}</span>
+                <span style={{ fontSize: '11px', color: '#525252', flexShrink: 0 }}>
+                  {(file.size / 1024).toFixed(1)} KB
+                </span>
               </div>
-              <button onClick={(e) => { e.stopPropagation(); setFiles(p => p.filter(f => f.name !== file.name)); }}
-                className="btn-ghost" style={{ padding: '4px', flexShrink: 0, color: 'rgba(255,0,128,0.5)' }}>
-                <X size={14} />
+              <button
+                onClick={(e) => { e.stopPropagation(); setFiles(p => p.filter(f => f.name !== file.name)); }}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: '#404040', padding: '2px', display: 'flex',
+                  flexShrink: 0, transition: 'color 0.12s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = '#e8e8e8'}
+                onMouseLeave={e => e.currentTarget.style.color = '#404040'}
+              >
+                <X size={13} />
               </button>
             </div>
           ))}
@@ -167,13 +157,16 @@ export default function UploadZone({ onUploadComplete }) {
 
       {/* Submit */}
       {files.length > 0 && status !== 'success' && (
-        <button onClick={handleSubmit} disabled={status === 'uploading'}
-          className="btn-primary" style={{ width: '100%', marginTop: '16px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+        <button
+          onClick={handleSubmit}
+          disabled={status === 'uploading'}
+          className="btn-primary"
+          style={{ width: '100%', marginTop: '10px' }}
+        >
           {status === 'uploading' ? (
-            <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> {progress}</>
+            <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> {progress}</>
           ) : (
-            <><CheckCircle size={16} /> Generate Documentation ({files.length} file{files.length !== 1 ? 's' : ''})</>
+            <>Generate docs · {files.length} file{files.length !== 1 ? 's' : ''}</>
           )}
         </button>
       )}
@@ -181,13 +174,13 @@ export default function UploadZone({ onUploadComplete }) {
       {/* Success */}
       {status === 'success' && (
         <div className="animate-fade-in" style={{
-          marginTop: '16px', padding: '14px 18px', borderRadius: '12px',
-          background: 'rgba(0,255,136,0.06)', border: '1px solid rgba(0,255,136,0.2)',
-          display: 'flex', alignItems: 'center', gap: '10px',
+          marginTop: '10px', padding: '10px 14px', borderRadius: '7px',
+          background: '#161616', border: '1px solid #2a2a2a',
+          display: 'flex', alignItems: 'center', gap: '8px',
         }}>
-          <CheckCircle size={16} color="#00ff88" style={{ flexShrink: 0 }} />
-          <p style={{ fontSize: '13px', color: '#00ff88', fontWeight: 600 }}>
-            Documentation generated! Redirecting to dashboard...
+          <CheckCircle size={14} color="#e8e8e8" style={{ flexShrink: 0 }} />
+          <p style={{ fontSize: '13px', color: '#a0a0a0' }}>
+            Done — redirecting to your documentation…
           </p>
         </div>
       )}

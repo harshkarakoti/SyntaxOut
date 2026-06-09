@@ -14,9 +14,8 @@ export default function ProjectPage() {
   const [loading, setLoading]           = useState(true);
   const [error, setError]               = useState('');
 
-  // Layout states
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [leftWidth, setLeftWidth]               = useState(60); // default to 60% for code viewer
+  const [leftWidth, setLeftWidth]               = useState(60);
   const [isDragging, setIsDragging]             = useState(false);
 
   useEffect(() => {
@@ -42,26 +41,16 @@ export default function ProjectPage() {
     })();
   }, [activeModule, id]);
 
-  // Handle split pane resizing
   useEffect(() => {
     if (!isDragging) return;
-
     const handleMouseMove = (e) => {
       const container = document.getElementById('workspace-container');
       if (!container) return;
       const rect = container.getBoundingClientRect();
       const newLeftWidth = ((e.clientX - rect.left) / rect.width) * 100;
-      
-      // Keep width constraints between 15% and 88%
-      if (newLeftWidth > 15 && newLeftWidth < 88) {
-        setLeftWidth(newLeftWidth);
-      }
+      if (newLeftWidth > 15 && newLeftWidth < 88) setLeftWidth(newLeftWidth);
     };
-
-    const handleMouseUp = () => {
-      setIsDragging(false);
-    };
-
+    const handleMouseUp = () => setIsDragging(false);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
     return () => {
@@ -82,115 +71,135 @@ export default function ProjectPage() {
     a.click();
   };
 
-  // ── Loading / Error states ────────────────────────────────────────────────
   if (loading) return (
     <div style={{ height: '100vh', display: 'flex', alignItems: 'center',
-      justifyContent: 'center', color: 'rgba(0,212,255,0.5)', gap: '10px', paddingTop: '64px' }}>
-      <Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} />
-      Loading documentation...
+      justifyContent: 'center', color: '#525252', gap: '8px',
+      paddingTop: '52px', fontSize: '13px' }}>
+      <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
+      Loading…
     </div>
   );
 
   if (error) return (
     <div style={{ height: '100vh', display: 'flex', alignItems: 'center',
-      justifyContent: 'center', color: '#fb7185', gap: '10px', paddingTop: '64px' }}>
-      <AlertCircle size={18} /> {error}
+      justifyContent: 'center', color: '#c0392b', gap: '8px',
+      paddingTop: '52px', fontSize: '13px' }}>
+      <AlertCircle size={15} /> {error}
     </div>
   );
 
-  // ── Main Layout ───────────────────────────────────────────────────────────
   return (
     <div style={{ display: 'flex', flexDirection: 'column',
-      height: '100vh', paddingTop: '64px', overflow: 'hidden' }}>
+      height: '100vh', paddingTop: '52px', overflow: 'hidden' }}>
 
-      {/* ── Top Bar ──────────────────────────────────────────────────────── */}
+      {/* Top bar */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '10px 20px', flexShrink: 0,
-        borderBottom: '1px solid rgba(0,212,255,0.08)',
-        background: 'rgba(5,10,20,0.9)', backdropFilter: 'blur(12px)',
+        padding: '8px 16px', flexShrink: 0,
+        borderBottom: '1px solid #1f1f1f',
+        background: '#0d0d0d',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
           <Link to="/projects" style={{
-            display: 'flex', alignItems: 'center', padding: '6px',
-            borderRadius: '8px', color: 'rgba(0,212,255,0.5)',
-            background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.1)',
-            transition: 'all 0.15s', textDecoration: 'none',
-          }}>
-            <ChevronLeft size={15} />
+            display: 'flex', alignItems: 'center', padding: '5px',
+            borderRadius: '6px', color: '#525252',
+            background: '#161616', border: '1px solid #222',
+            transition: 'border-color 0.12s, color 0.12s', textDecoration: 'none',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = '#333'; e.currentTarget.style.color = '#a0a0a0'; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = '#222'; e.currentTarget.style.color = '#525252'; }}
+          >
+            <ChevronLeft size={14} />
           </Link>
 
-          {/* Toggle Sidebar Button */}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             style={{
-              display: 'flex', alignItems: 'center', padding: '6px',
-              borderRadius: '8px',
-              color: sidebarCollapsed ? 'rgba(0,212,255,0.4)' : '#00d4ff',
-              background: sidebarCollapsed ? 'rgba(0,212,255,0.02)' : 'rgba(0,212,255,0.08)',
-              border: sidebarCollapsed ? '1px solid rgba(0,212,255,0.1)' : '1px solid rgba(0,212,255,0.25)',
-              cursor: 'pointer', transition: 'all 0.15s',
+              display: 'flex', alignItems: 'center', padding: '5px',
+              borderRadius: '6px',
+              color: sidebarCollapsed ? '#404040' : '#a0a0a0',
+              background: '#161616', border: '1px solid #222',
+              cursor: 'pointer', transition: 'all 0.12s',
             }}
-            title={sidebarCollapsed ? "Show Files Sidebar" : "Hide Files Sidebar"}
+            onMouseEnter={e => e.currentTarget.style.borderColor = '#333'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = '#222'}
+            title={sidebarCollapsed ? 'Show files' : 'Hide files'}
           >
-            <FileCode size={15} />
+            <FileCode size={14} />
           </button>
 
           <div style={{ minWidth: 0 }}>
-            <h1 style={{ fontSize: '13px', fontWeight: 700, color: '#e2e8f0',
-              margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <h1 style={{
+              fontSize: '13px', fontWeight: 600, color: '#e8e8e8',
+              margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>
               {project?.name}
             </h1>
-            <p style={{ fontSize: '11px', color: 'rgba(0,212,255,0.4)', margin: 0, marginTop: '2px',
-              fontFamily: 'JetBrains Mono, monospace' }}>
+            <p style={{
+              fontSize: '11px', color: '#525252', margin: 0, marginTop: '1px',
+              fontFamily: 'var(--mono)',
+            }}>
               {modules.length} file{modules.length !== 1 ? 's' : ''} ·{' '}
               {project?.languages?.join(', ') || 'Unknown'} ·{' '}
-              {new Date(project?.createdAt).toLocaleDateString('en-IN',
-                { day: 'numeric', month: 'short', year: 'numeric' })}
+              {new Date(project?.createdAt).toLocaleDateString('en-IN', {
+                day: 'numeric', month: 'short', year: 'numeric',
+              })}
             </p>
           </div>
         </div>
 
-        <button onClick={exportJSON} className="btn-secondary"
-          style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', flexShrink: 0 }}>
-          <Download size={13} /> Export JSON
+        <button
+          onClick={exportJSON}
+          className="btn-secondary"
+          style={{ fontSize: '12px', flexShrink: 0 }}
+        >
+          <Download size={12} /> Export JSON
         </button>
       </div>
 
-      {/* ── Workspace Row ─────────────────────────────────────────────────── */}
+      {/* Workspace */}
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden', minHeight: 0 }}>
 
-        {/* File Sidebar */}
+        {/* File sidebar */}
         <aside style={{
-          width: sidebarCollapsed ? '0px' : '150px',
-          padding: sidebarCollapsed ? '0px' : '16px 10px',
+          width: sidebarCollapsed ? '0px' : '144px',
+          padding: sidebarCollapsed ? '0' : '12px 8px',
           overflowY: sidebarCollapsed ? 'hidden' : 'auto',
           overflowX: 'hidden',
           flexShrink: 0,
-          borderRight: sidebarCollapsed ? 'none' : '1px solid rgba(0,212,255,0.06)',
-          background: 'rgba(2,8,16,0.6)',
-          transition: 'all 0.2s ease-in-out',
+          borderRight: sidebarCollapsed ? 'none' : '1px solid #1f1f1f',
+          background: '#0d0d0d',
+          transition: 'width 0.18s ease, padding 0.18s ease, opacity 0.15s',
           opacity: sidebarCollapsed ? 0 : 1,
         }}>
-          <p style={{ fontSize: '10px', fontWeight: 700, color: 'rgba(0,212,255,0.3)',
-            letterSpacing: '0.12em', marginBottom: '10px', paddingLeft: '8px' }}>
-            FILES
+          <p style={{
+            fontSize: '10px', fontWeight: 600, color: '#404040',
+            letterSpacing: '0.1em', marginBottom: '8px', paddingLeft: '6px',
+            textTransform: 'uppercase', fontFamily: 'var(--mono)',
+          }}>
+            Files
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', width: '130px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
             {modules.map((mod) => {
               const active = activeModule?._id === mod._id;
               return (
                 <button key={mod._id} onClick={() => setActiveModule(mod)} style={{
-                  width: '100%', textAlign: 'left', padding: '8px 10px',
-                  borderRadius: '8px', border: active ? '1px solid rgba(0,212,255,0.2)' : '1px solid transparent',
-                  background: active ? 'rgba(0,212,255,0.08)' : 'transparent',
-                  color: active ? '#00d4ff' : 'rgba(226,232,240,0.45)',
-                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px',
-                  transition: 'all 0.15s', fontSize: '12px',
-                  fontFamily: 'JetBrains Mono, monospace',
-                }}>
-                  <FileCode size={12} style={{ flexShrink: 0 }} />
-                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  width: '100%', textAlign: 'left', padding: '6px 8px',
+                  borderRadius: '6px',
+                  border: '1px solid transparent',
+                  background: active ? '#1e1e1e' : 'transparent',
+                  borderColor: active ? '#2a2a2a' : 'transparent',
+                  color: active ? '#e8e8e8' : '#525252',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
+                  transition: 'all 0.12s', fontSize: '11px',
+                  fontFamily: 'var(--mono)', whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                }}
+                onMouseEnter={e => { if (!active) e.currentTarget.style.color = '#a0a0a0'; }}
+                onMouseLeave={e => { if (!active) e.currentTarget.style.color = '#525252'; }}
+                >
+                  <FileCode size={11} style={{ flexShrink: 0 }} />
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {mod.filename}
                   </span>
                 </button>
@@ -199,64 +208,50 @@ export default function ProjectPage() {
           </div>
         </aside>
 
-        {/* Dual Pane */}
+        {/* Dual pane */}
         {fullModule ? (
           <div
             id="workspace-container"
             style={{
-              flex: 1,
-              display: 'flex',
-              overflow: 'hidden',
-              minWidth: 0,
-              position: 'relative',
-              userSelect: isDragging ? 'none' : 'auto',
+              flex: 1, display: 'flex', overflow: 'hidden', minWidth: 0,
+              position: 'relative', userSelect: isDragging ? 'none' : 'auto',
             }}
           >
-            {/* Left — Code Viewer */}
+            {/* Code viewer */}
             <div style={{
-              width: `${leftWidth}%`,
-              minWidth: '250px',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-              flexShrink: 0,
+              width: `${leftWidth}%`, minWidth: '200px',
+              overflow: 'hidden', display: 'flex', flexDirection: 'column', flexShrink: 0,
             }}>
               <CodeViewer filename={fullModule.filename} content={fullModule.rawContent} />
             </div>
 
-            {/* Draggable Divider */}
+            {/* Divider */}
             <div
               onMouseDown={() => setIsDragging(true)}
               style={{
-                width: '6px',
-                cursor: 'col-resize',
-                background: isDragging ? 'rgba(0, 212, 255, 0.4)' : 'rgba(0,212,255,0.06)',
-                borderLeft: '1px solid rgba(0,212,255,0.08)',
-                borderRight: '1px solid rgba(0,212,255,0.08)',
-                transition: 'background 0.2s',
-                zIndex: 10,
-                flexShrink: 0,
+                width: '5px', cursor: 'col-resize', flexShrink: 0, zIndex: 10,
+                background: isDragging ? '#333' : '#1a1a1a',
+                borderLeft: '1px solid #1f1f1f',
+                borderRight: '1px solid #1f1f1f',
+                transition: 'background 0.15s',
               }}
-              onMouseEnter={(e) => { if (!isDragging) e.currentTarget.style.background = 'rgba(0, 212, 255, 0.2)'; }}
-              onMouseLeave={(e) => { if (!isDragging) e.currentTarget.style.background = 'rgba(0,212,255,0.06)'; }}
+              onMouseEnter={e => { if (!isDragging) e.currentTarget.style.background = '#2a2a2a'; }}
+              onMouseLeave={e => { if (!isDragging) e.currentTarget.style.background = '#1a1a1a'; }}
             />
 
-            {/* Right — Schema Docs */}
+            {/* Schema docs */}
             <div style={{
-              flex: 1,
-              minWidth: '250px',
-              overflowY: 'auto',
-              padding: '16px',
-              background: 'rgba(2,8,16,0.4)',
+              flex: 1, minWidth: '200px', overflowY: 'auto',
+              padding: '14px', background: '#0d0d0d',
             }}>
               <SchemaTable module={fullModule} />
             </div>
           </div>
         ) : (
           <div style={{ flex: 1, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', color: 'rgba(0,212,255,0.3)', gap: '8px' }}>
-            <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
-            Loading module...
+            justifyContent: 'center', color: '#525252', gap: '8px', fontSize: '13px' }}>
+            <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} />
+            Loading module…
           </div>
         )}
       </div>

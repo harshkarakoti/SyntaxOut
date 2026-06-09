@@ -1,21 +1,26 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import ProjectList from '../components/ProjectList.jsx';
-import { FolderOpen, Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Plus } from 'lucide-react';
 
 export default function ProjectsPage() {
   return (
-    <main className="min-h-screen pt-24 pb-16 px-6">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+    <main style={{ minHeight: '100vh', paddingTop: '92px', paddingBottom: '60px' }}>
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 20px' }}>
+
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '28px' }}>
           <div>
-            <h1 className="text-2xl font-bold text-slate-100">Projects</h1>
-            <p className="text-slate-500 text-sm mt-1">Your parsed documentation history</p>
+            <h1 style={{ fontSize: '20px', fontWeight: 600, color: '#e8e8e8', letterSpacing: '-0.03em' }}>
+              History
+            </h1>
+            <p style={{ fontSize: '13px', color: '#525252', marginTop: '4px' }}>
+              Your parsed documentation sessions
+            </p>
           </div>
-          <Link to="/" className="btn-primary flex items-center gap-2 text-sm py-2.5 px-4">
-            <Plus size={15} /> New Project
+          <Link to="/" className="btn-secondary" style={{ textDecoration: 'none', flexShrink: 0 }}>
+            <Plus size={13} /> New
           </Link>
         </div>
+
         <ProjectList />
       </div>
     </main>

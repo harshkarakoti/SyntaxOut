@@ -1,77 +1,79 @@
 import { useNavigate } from 'react-router-dom';
 import UploadZone from '../components/UploadZone.jsx';
-import { Clock, Shield, Terminal } from 'lucide-react';
-
-const STATS = [
-  { icon: Clock,    value: '< 5s', label: 'Time to Docs',        color: '#00d4ff' },
-  { icon: Shield,   value: '$0',   label: 'Infra Cost',          color: '#00ff88' },
-  { icon: Terminal, value: '11',   label: 'Languages',           color: '#ff0080' },
-];
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const handleComplete = (projectId) => setTimeout(() => navigate(`/projects/${projectId}`), 800);
+  const handleComplete = (projectId) => setTimeout(() => navigate(`/projects/${projectId}`), 600);
 
   return (
-    <main style={{ minHeight: '100vh', paddingTop: '120px', paddingBottom: '80px' }}>
-      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
+    <main style={{ minHeight: '100vh', paddingTop: '100px', paddingBottom: '80px' }}>
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 20px' }}>
 
-        {/* Badge */}
-        <div className="animate-fade-in" style={{
-          display: 'inline-flex', alignItems: 'center', gap: '8px',
-          padding: '6px 16px', borderRadius: '99px', marginBottom: '28px',
-          background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.2)',
-          fontSize: '11px', fontWeight: 700, color: '#00d4ff', letterSpacing: '0.08em',
-          fontFamily: 'JetBrains Mono',
-        }}>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%',
-            background: '#00d4ff', boxShadow: '0 0 6px #00d4ff' }} />
-          POWERED BY GEMINI 2.5 FLASH
+        {/* Heading block */}
+        <div className="animate-slide-up" style={{ marginBottom: '40px' }}>
+          <p style={{
+            fontSize: '11px', fontWeight: 600,
+            color: '#525252', letterSpacing: '0.1em',
+            textTransform: 'uppercase', marginBottom: '16px',
+            fontFamily: 'var(--mono)',
+          }}>
+            Powered by Gemini 2.5 Flash
+          </p>
+          <h1 style={{
+            fontSize: 'clamp(28px, 5vw, 42px)',
+            fontWeight: 600,
+            letterSpacing: '-0.04em',
+            lineHeight: 1.15,
+            color: '#e8e8e8',
+            marginBottom: '14px',
+          }}>
+            Turn code into<br />
+            <span style={{ color: '#525252' }}>API documentation</span>
+          </h1>
+          <p style={{
+            fontSize: '14px',
+            color: '#525252',
+            lineHeight: 1.6,
+            maxWidth: '420px',
+          }}>
+            Drop a source file. Get structured documentation — endpoints,
+            functions, classes, and imports — in seconds.
+          </p>
         </div>
 
-        {/* Headline */}
-        <h1 className="animate-slide-up" style={{
-          fontSize: 'clamp(38px, 7vw, 68px)', fontWeight: 900, lineHeight: 1.05,
-          letterSpacing: '-0.03em', marginBottom: '16px', color: '#e2e8f0',
-          animationDelay: '50ms',
-        }}>
-          Turn code into<br />
-          <span className="text-glow-cyan">API documentation</span>
-        </h1>
+        {/* Upload */}
+        <div className="animate-slide-up" style={{ animationDelay: '80ms' }}>
+          <UploadZone onUploadComplete={handleComplete} />
+        </div>
 
-        {/* One-liner */}
-        <p className="animate-slide-up" style={{
-          fontSize: '16px', color: 'rgba(226,232,240,0.4)',
-          marginBottom: '40px', animationDelay: '100ms',
-        }}>
-          Drop a file. Get structured docs. Under 5 seconds.
-        </p>
-
-        {/* Stats */}
-        <div className="animate-slide-up" style={{
-          display: 'flex', justifyContent: 'center', gap: '10px',
-          marginBottom: '48px', flexWrap: 'wrap', animationDelay: '150ms',
-        }}>
-          {STATS.map(({ icon: Icon, value, label, color }) => (
-            <div key={label} className="card" style={{ padding: '12px 20px',
-              display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Icon size={14} style={{ color }} />
-              <span style={{ fontSize: '16px', fontWeight: 800, color,
-                fontFamily: 'JetBrains Mono' }}>{value}</span>
-              <span style={{ fontSize: '12px', color: 'rgba(226,232,240,0.35)',
-                fontWeight: 500 }}>{label}</span>
+        {/* Footer hint */}
+        <div
+          className="animate-fade-in"
+          style={{
+            marginTop: '32px',
+            display: 'flex', gap: '24px',
+            animationDelay: '160ms',
+          }}
+        >
+          {[
+            { value: '< 5s', label: 'parse time' },
+            { value: '10', label: 'languages' },
+            { value: '24h', label: 'auto-delete' },
+          ].map(({ value, label }) => (
+            <div key={label}>
+              <div style={{
+                fontSize: '16px', fontWeight: 600,
+                color: '#e8e8e8', letterSpacing: '-0.03em',
+                fontFamily: 'var(--mono)',
+              }}>{value}</div>
+              <div style={{ fontSize: '12px', color: '#525252', marginTop: '2px' }}>
+                {label}
+              </div>
             </div>
           ))}
-        </div>
-
-        {/* Upload Zone */}
-        <div className="animate-slide-up" style={{ animationDelay: '200ms', textAlign: 'left' }}>
-          <UploadZone onUploadComplete={handleComplete} />
         </div>
 
       </div>
     </main>
   );
 }
-
-

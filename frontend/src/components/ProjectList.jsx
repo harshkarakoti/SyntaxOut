@@ -3,10 +3,16 @@ import { Link } from 'react-router-dom';
 import { getAllProjects, deleteProject } from '../services/api.js';
 import { FolderOpen, Trash2, Clock, FileCode, ChevronRight, Loader2, AlertCircle } from 'lucide-react';
 
-const STATUS_STYLES = {
-  ready:      'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-  processing: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-  failed:     'bg-rose-500/15 text-rose-400 border-rose-500/30',
+const STATUS_COLOR = {
+  ready:      '#e8e8e8',
+  processing: '#a0a0a0',
+  failed:     '#c0392b',
+};
+
+const STATUS_BG = {
+  ready:      '#1e1e1e',
+  processing: '#1a1a1a',
+  failed:     '#1c1212',
 };
 
 export default function ProjectList() {
@@ -36,74 +42,113 @@ export default function ProjectList() {
   };
 
   if (loading) return (
-    <div className="flex items-center justify-center py-20 text-slate-500">
-      <Loader2 size={20} className="animate-spin mr-2" /> Loading projects...
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center',
+      gap: '8px', padding: '60px 0', color: '#525252', fontSize: '13px' }}>
+      <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
+      Loading…
     </div>
   );
 
   if (error) return (
-    <div className="flex items-center gap-2 text-rose-400 py-10 justify-center">
-      <AlertCircle size={16} /> {error}
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center',
+      gap: '8px', padding: '60px 0', color: '#c0392b', fontSize: '13px' }}>
+      <AlertCircle size={14} /> {error}
     </div>
   );
 
   if (!projects.length) return (
-    <div className="text-center py-20 text-slate-500">
-      <FolderOpen size={36} className="mx-auto mb-3 opacity-40" />
-      <p className="text-sm">No projects yet. Upload some files to get started.</p>
+    <div style={{ textAlign: 'center', padding: '80px 0', color: '#525252' }}>
+      <FolderOpen size={28} style={{ margin: '0 auto 12px', opacity: 0.4 }} />
+      <p style={{ fontSize: '13px' }}>No projects yet.</p>
+      <p style={{ fontSize: '12px', marginTop: '4px', color: '#404040' }}>
+        Upload some files from the home page to get started.
+      </p>
     </div>
   );
 
   return (
-    <div className="space-y-3 animate-fade-in">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}
+      className="animate-fade-in">
       {projects.map((project, i) => (
         <Link
           key={project._id}
           to={`/projects/${project._id}`}
-          style={{ animationDelay: `${i * 60}ms` }}
-          className="block glass rounded-xl p-4 hover:border-violet-500/30 hover:bg-slate-700/30
-                     transition-all duration-200 group animate-slide-up"
+          style={{
+            display: 'block', textDecoration: 'none',
+            background: '#161616', border: '1px solid #222',
+            borderRadius: '8px', padding: '12px 14px',
+            transition: 'border-color 0.15s',
+            animationDelay: `${i * 40}ms`,
+          }}
+          onMouseEnter={e => e.currentTarget.style.borderColor = '#333'}
+          onMouseLeave={e => e.currentTarget.style.borderColor = '#222'}
+          className="animate-slide-up"
         >
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-lg bg-violet-500/10 border border-violet-500/20
-                              flex items-center justify-center flex-shrink-0
-                              group-hover:bg-violet-500/20 transition-colors">
-                <FolderOpen size={15} className="text-violet-400" />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+              <div style={{
+                width: '32px', height: '32px', borderRadius: '7px',
+                background: '#1e1e1e', border: '1px solid #2a2a2a',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0,
+              }}>
+                <FolderOpen size={13} color="#606060" />
               </div>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-slate-200 truncate group-hover:text-white">
+              <div style={{ minWidth: 0 }}>
+                <p style={{
+                  fontSize: '13px', fontWeight: 500, color: '#e8e8e8',
+                  whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                }}>
                   {project.name}
                 </p>
-                <div className="flex items-center gap-2 mt-1 flex-wrap">
-                  <span className={`badge border ${STATUS_STYLES[project.status] || STATUS_STYLES.ready}`}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '3px' }}>
+                  <span style={{
+                    fontSize: '11px',
+                    color: STATUS_COLOR[project.status] || '#a0a0a0',
+                    background: STATUS_BG[project.status] || '#1e1e1e',
+                    padding: '1px 6px', borderRadius: '4px',
+                    fontFamily: 'var(--mono)',
+                  }}>
                     {project.status}
                   </span>
-                  <span className="text-xs text-slate-500 flex items-center gap-1">
-                    <FileCode size={11} /> {project.fileCount} file{project.fileCount !== 1 ? 's' : ''}
+                  <span style={{ fontSize: '11px', color: '#525252', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <FileCode size={10} />
+                    {project.fileCount} file{project.fileCount !== 1 ? 's' : ''}
                   </span>
                   {project.languages?.length > 0 && (
-                    <span className="text-xs text-slate-500">{project.languages.join(', ')}</span>
+                    <span style={{ fontSize: '11px', color: '#404040', fontFamily: 'var(--mono)' }}>
+                      {project.languages.join(', ')}
+                    </span>
                   )}
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-1 flex-shrink-0">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
               <button
                 onClick={(e) => handleDelete(e, project._id)}
-                className="btn-ghost p-1.5 opacity-0 group-hover:opacity-100 text-slate-600 hover:text-rose-400"
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: '#333', padding: '4px', display: 'flex',
+                  transition: 'color 0.12s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = '#c0392b'}
+                onMouseLeave={e => e.currentTarget.style.color = '#333'}
               >
                 <Trash2 size={13} />
               </button>
-              <ChevronRight size={15} className="text-slate-600 group-hover:text-violet-400 transition-colors" />
+              <ChevronRight size={14} color="#404040" />
             </div>
           </div>
 
-          <div className="flex items-center gap-1 mt-3 text-xs text-slate-600">
-            <Clock size={11} />
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '4px',
+            marginTop: '10px', fontSize: '11px', color: '#404040',
+          }}>
+            <Clock size={10} />
             {new Date(project.createdAt).toLocaleDateString('en-IN', {
-              day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+              day: 'numeric', month: 'short', year: 'numeric',
+              hour: '2-digit', minute: '2-digit',
             })}
           </div>
         </Link>

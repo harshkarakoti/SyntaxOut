@@ -1,16 +1,23 @@
-// HTTP method color badges
+// HTTP method badges — neutral monochrome palette
 const METHOD_STYLES = {
-  GET:    'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
-  POST:   'bg-sky-500/15 text-sky-400 border border-sky-500/30',
-  PUT:    'bg-amber-500/15 text-amber-400 border border-amber-500/30',
-  PATCH:  'bg-amber-500/15 text-amber-400 border border-amber-500/30',
-  DELETE: 'bg-rose-500/15 text-rose-400 border border-rose-500/30',
+  GET:    { color: '#a0a0a0', bg: '#1e1e1e', border: '#2a2a2a' },
+  POST:   { color: '#e8e8e8', bg: '#1e1e1e', border: '#2a2a2a' },
+  PUT:    { color: '#a0a0a0', bg: '#1e1e1e', border: '#2a2a2a' },
+  PATCH:  { color: '#a0a0a0', bg: '#1e1e1e', border: '#2a2a2a' },
+  DELETE: { color: '#c0392b', bg: '#1c1212', border: '#2a1a1a' },
 };
 
 export default function Badge({ method, label }) {
-  const styles = METHOD_STYLES[method?.toUpperCase()] || 'bg-slate-700 text-slate-300 border border-slate-600';
+  const s = METHOD_STYLES[method?.toUpperCase()] || { color: '#606060', bg: '#161616', border: '#222' };
   return (
-    <span className={`badge ${styles}`}>
+    <span style={{
+      display: 'inline-flex', alignItems: 'center',
+      fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 600,
+      letterSpacing: '0.05em',
+      padding: '2px 6px', borderRadius: '4px',
+      color: s.color, background: s.bg,
+      border: `1px solid ${s.border}`,
+    }}>
       {label || method}
     </span>
   );
