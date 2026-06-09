@@ -162,6 +162,10 @@ export const parseMultipleFiles = async (files) => {
       results.push({ success: true, ...result });
     } catch (error) {
       // Don't fail the entire batch — report per-file errors gracefully
+      console.error(`[PARSER ERROR] File: ${file.filename} — ${error.message}`);
+      if (error.response) {
+        console.error(`[PARSER ERROR] API response:`, JSON.stringify(error.response?.data || error.response, null, 2));
+      }
       results.push({
         success: false,
         filename: file.filename,
