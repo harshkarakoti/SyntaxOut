@@ -1,36 +1,69 @@
 import { Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 
-// ─── Syntax highlighter ───────────────────────────────────────────────────────
+// ─── Syntax Highlighter ───────────────────────────────────────────────────────
+// Single-pass tokenizer — uses one regex with alternation so that once a
+// comment or string is matched, keywords/numbers can never nest inside it.
+const COLORS = {
+  comment:  '#4a5568',
+  string:   '#a0a0a0',
+  keyword:  '#6b7280',
+  type:     '#718096',
+  number:   '#718096',
+  fn:       '#cbd5e0',
+  plain:    '#6b7280',
+};
+
+const KW = 'const|let|var|function|async|await|return|export|import|from|class|extends|new|if|else|try|catch|throw|for|of|in|while|switch|case|break|default|typeof|instanceof|null|undefined|true|false|this|super|require|module|def|elif|except|with|as|pass|None|True|False|and|or|not|lambda|yield|global|del|assert|raise';
+const TY = 'string|number|boolean|void|any|Array|Promise|Object|int|float|str|bool|list|dict|tuple';
+
+// Token regex — order matters: comment > string > keyword > type > number > fn-call > plain
+const TOKEN_RE = new RegExp(
+  [
+    '(\\/\\/[^\\n]*|#[^\\n]*)',                // 1: line comment
+    '(`[^`]*`|"(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\')', // 2: string
+    `\\b(${KW})\\b`,                           // 3: keyword
+    `\\b(${TY})\\b`,                           // 4: type
+    '\\b(\\d+\\.?\\d*)\\b',                    // 5: number
+    '\\b([A-Za-z_$][\\w$]*)(?=\\s*\\()',       // 6: function call
+    '([<>&])',                                  // 7: HTML-unsafe chars
+  ].join('|'),
+  'g'
+);
+
+const escape = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const span = (color, text) => `<span style="color:${color}">${text}</span>`;
+
 const highlight = (raw) => {
   if (!raw) return '';
-  let s = raw
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  let result = '';
+  let lastIndex = 0;
+  let m;
+  TOKEN_RE.lastIndex = 0;
 
-  const c  = (color, text) => `<span style="color:${color}">${text}</span>`;
-  const ci = (color, text) => `<span style="color:${color};font-style:italic">${text}</span>`;
+  while ((m = TOKEN_RE.exec(raw)) !== null) {
+    // Append any plain text between last match and this one (escaped)
+    if (m.index > lastIndex) {
+      result += span(COLORS.plain, escape(raw.slice(lastIndex, m.index)));
+    }
 
-  // Comments
-  s = s.replace(/(\/\/[^\n]*|#[^\n]*)/g, (m) => ci('#444', m));
-  // Strings
-  s = s.replace(/(&quot;|&#039;|`)[^&]*?\1|"[^"]*"|'[^']*'|`[^`]*`/g, (m) => c('#a0a0a0', m));
-  // Keywords
-  s = s.replace(
-    /\b(const|let|var|function|async|await|return|export|import|from|class|extends|new|if|else|try|catch|throw|for|of|in|while|switch|case|break|default|typeof|instanceof|null|undefined|true|false|this|super|require|module|def|elif|except|with|as|pass|None|True|False|and|or|not|lambda|yield|global|del|assert|raise)\b/g,
-    (m) => c('#606060', m)
-  );
-  // Built-in types
-  s = s.replace(
-    /\b(string|number|boolean|void|any|Array|Promise|Object|int|float|str|bool|list|dict|tuple)\b/g,
-    (m) => c('#707070', m)
-  );
-  // Numbers
-  s = s.replace(/\b(\d+\.?\d*)\b/g, (m) => c('#808080', m));
-  // Function calls
-  s = s.replace(/\b([a-zA-Z_$][a-zA-Z0-9_$]*)(?=\s*\()/g, (m) => c('#c8c8c8', m));
-  return s;
+    if (m[1] !== undefined) result += span(COLORS.comment, escape(m[1]));        // comment
+    else if (m[2] !== undefined) result += span(COLORS.string, escape(m[2]));    // string
+    else if (m[3] !== undefined) result += span(COLORS.keyword, escape(m[3]));   // keyword
+    else if (m[4] !== undefined) result += span(COLORS.type, escape(m[4]));      // type
+    else if (m[5] !== undefined) result += span(COLORS.number, escape(m[5]));    // number
+    else if (m[6] !== undefined) result += span(COLORS.fn, escape(m[6]));        // fn call
+    else if (m[7] !== undefined) result += escape(m[7]);                          // <>&
+
+    lastIndex = m.index + m[0].length;
+  }
+
+  // Remaining plain text
+  if (lastIndex < raw.length) {
+    result += span(COLORS.plain, escape(raw.slice(lastIndex)));
+  }
+
+  return result;
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
