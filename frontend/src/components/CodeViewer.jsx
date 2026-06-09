@@ -47,15 +47,15 @@ export default function CodeViewer({ filename, content }) {
   return (
     <div style={{
       height: '100%', display: 'flex', flexDirection: 'column',
-      background: '#0a0a0a', overflow: 'hidden',
-      borderRight: '1px solid #1a1a1a',
+      background: '#0a0d12', overflow: 'hidden',
+      borderRight: '1px solid #1a2030',
     }}>
 
       {/* Header */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '8px 14px', borderBottom: '1px solid #1a1a1a',
-        background: '#0d0d0d', flexShrink: 0,
+        padding: '8px 14px', borderBottom: '1px solid #1a2030',
+        background: '#0c0f14', flexShrink: 0,
       }}>
         <span style={{
           fontFamily: 'var(--mono)', fontSize: '12px', color: '#525252',
@@ -94,8 +94,8 @@ export default function CodeViewer({ filename, content }) {
                   paddingLeft: '10px', paddingRight: '10px',
                   textAlign: 'right', userSelect: 'none', verticalAlign: 'top',
                   fontFamily: 'var(--mono)', fontSize: '12px',
-                  lineHeight: '20px', color: '#2e2e2e',
-                  borderRight: '1px solid #1a1a1a',
+                  lineHeight: '20px', color: 'rgba(34,211,238,0.18)',
+                  borderRight: '1px solid #1a2030',
                 }}>
                   {i + 1}
                 </td>

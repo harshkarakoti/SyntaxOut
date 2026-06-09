@@ -26,11 +26,12 @@ export default function Navbar() {
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
           <div style={{
             width: '28px', height: '28px', borderRadius: '7px',
-            background: '#e8e8e8',
+            background: '#0e2a2e',
+            border: '1px solid rgba(34,211,238,0.25)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             flexShrink: 0,
           }}>
-            <Braces size={14} color="#0d0d0d" strokeWidth={2.5} />
+            <Braces size={14} color="#22d3ee" strokeWidth={2.5} />
           </div>
           <span style={{
             fontWeight: 600, fontSize: '15px',
@@ -48,9 +49,9 @@ export default function Navbar() {
               <Link key={to} to={to} style={{
                 display: 'flex', alignItems: 'center', gap: '5px',
                 padding: '5px 12px', borderRadius: '6px', textDecoration: 'none',
-                fontSize: '13px', fontWeight: 500,
-                color: active ? '#e8e8e8' : '#606060',
-                background: active ? '#1e1e1e' : 'transparent',
+                fontSize: '13px', fontWeight: active ? 600 : 500,
+                color: active ? '#22d3ee' : '#475569',
+                background: active ? 'rgba(34,211,238,0.08)' : 'transparent',
                 transition: 'color 0.15s, background 0.15s',
               }}
               onMouseEnter={e => { if (!active) e.currentTarget.style.color = '#a0a0a0'; }}

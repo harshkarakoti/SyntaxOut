@@ -74,11 +74,13 @@ export default function UploadZone({ onUploadComplete }) {
 
         <div style={{
           width: '40px', height: '40px', borderRadius: '8px',
-          background: '#1e1e1e', border: '1px solid #2a2a2a',
+          background: isDragging ? 'rgba(34,211,238,0.1)' : '#131720',
+          border: `1px solid ${isDragging ? 'rgba(34,211,238,0.3)' : '#222a38'}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           margin: '0 auto 14px',
+          transition: 'all 0.2s',
         }}>
-          <UploadCloud size={18} color={isDragging ? '#e8e8e8' : '#606060'} />
+          <UploadCloud size={18} color={isDragging ? '#22d3ee' : '#475569'} />
         </div>
 
         <p style={{ fontSize: '14px', fontWeight: 500, color: '#e8e8e8', marginBottom: '4px' }}>
@@ -128,7 +130,7 @@ export default function UploadZone({ onUploadComplete }) {
               justifyContent: 'space-between', gap: '10px',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-                <FileCode size={13} color="#606060" style={{ flexShrink: 0 }} />
+                <FileCode size={13} color="#22d3ee" style={{ flexShrink: 0 }} />
                 <span style={{
                   fontSize: '13px', fontWeight: 500, color: '#e8e8e8',
                   whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',

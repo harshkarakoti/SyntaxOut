@@ -6,15 +6,17 @@
 
 /* ─── Tokens ────────────────────────────────────────────────────────────────── */
 :root {
-  --bg:       #0d0d0d;
-  --surface:  #161616;
-  --surface2: #1e1e1e;
-  --border:   #2a2a2a;
-  --border2:  #333;
-  --text:     #e8e8e8;
-  --text-2:   #a0a0a0;
-  --text-3:   #525252;
-  --accent:   #e8e8e8;
+  --bg:       #0c0f14;
+  --surface:  #131720;
+  --surface2: #1a2030;
+  --border:   #222a38;
+  --border2:  #2e3a50;
+  --text:     #e2e8f0;
+  --text-2:   #8899aa;
+  --text-3:   #475569;
+  --accent:   #22d3ee;
+  --accent-bg: rgba(34,211,238,0.08);
+  --accent-border: rgba(34,211,238,0.2);
   --mono:     'Geist Mono', 'JetBrains Mono', monospace;
 }
 
@@ -62,8 +64,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: var(--text);
-  color: var(--bg);
+  background: var(--accent);
+  color: #0c0f14;
   font-weight: 600;
   font-size: 13px;
   padding: 9px 18px;
@@ -74,7 +76,7 @@ body {
   transition: opacity 0.15s, transform 0.1s;
   letter-spacing: -0.01em;
 }
-.btn-primary:hover { opacity: 0.88; }
+.btn-primary:hover { opacity: 0.85; }
 .btn-primary:active { transform: scale(0.99); }
 .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 
@@ -96,9 +98,9 @@ body {
   letter-spacing: -0.01em;
 }
 .btn-secondary:hover {
-  background: var(--surface2);
-  border-color: var(--border2);
-  color: var(--text);
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+  color: var(--accent);
 }
 
 .btn-ghost {
@@ -128,8 +130,8 @@ body {
   transition: border-color 0.2s, background 0.2s;
 }
 .drop-zone:hover, .drop-zone.active {
-  border-color: #555;
-  background: var(--surface2);
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
 }
 
 /* ─── Badge ─────────────────────────────────────────────────────────────────── */
@@ -156,7 +158,7 @@ body {
 /* ─── Schema section ────────────────────────────────────────────────────────── */
 .schema-section { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
 .schema-section-header { background: var(--surface); transition: background 0.12s; }
-.schema-section-header:hover { background: var(--surface2); }
+.schema-section-header:hover { background: var(--accent-bg); }
 
 /* ─── Fade-in ───────────────────────────────────────────────────────────────── */
 @keyframes fadeUp {

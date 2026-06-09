@@ -25,14 +25,14 @@ const Section = ({ icon: Icon, title, count, children }) => {
         onMouseLeave={e => e.currentTarget.style.background = '#111'}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '7px',
-          fontSize: '12px', fontWeight: 500, color: '#a0a0a0' }}>
-          <Icon size={12} style={{ color: '#525252' }} />
+          fontSize: '12px', fontWeight: 500, color: '#8899aa' }}>
+          <Icon size={12} style={{ color: '#22d3ee' }} />
           {title}
           <span style={{
             fontSize: '10px', fontFamily: 'var(--mono)',
             padding: '1px 5px', borderRadius: '4px',
-            background: '#1e1e1e', color: '#525252',
-            border: '1px solid #2a2a2a',
+            background: 'rgba(34,211,238,0.06)', color: '#22d3ee',
+            border: '1px solid rgba(34,211,238,0.15)',
           }}>{count}</span>
         </div>
         {open
@@ -84,7 +84,7 @@ export default function SchemaTable({ module }) {
         }}>
           <div style={{
             display: 'flex', alignItems: 'center', gap: '5px',
-            fontSize: '10px', fontWeight: 600, color: '#404040',
+            fontSize: '10px', fontWeight: 600, color: '#22d3ee',
             letterSpacing: '0.1em', marginBottom: '8px', textTransform: 'uppercase',
           }}>
             <BookOpen size={10} /> Summary

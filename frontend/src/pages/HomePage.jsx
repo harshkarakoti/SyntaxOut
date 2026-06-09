@@ -11,14 +11,6 @@ export default function HomePage() {
 
         {/* Heading block */}
         <div className="animate-slide-up" style={{ marginBottom: '40px' }}>
-          <p style={{
-            fontSize: '11px', fontWeight: 600,
-            color: '#525252', letterSpacing: '0.1em',
-            textTransform: 'uppercase', marginBottom: '16px',
-            fontFamily: 'var(--mono)',
-          }}>
-            Powered by Gemini 2.5 Flash
-          </p>
           <h1 style={{
             fontSize: 'clamp(28px, 5vw, 42px)',
             fontWeight: 600,
@@ -63,7 +55,7 @@ export default function HomePage() {
             <div key={label}>
               <div style={{
                 fontSize: '16px', fontWeight: 600,
-                color: '#e8e8e8', letterSpacing: '-0.03em',
+                color: '#22d3ee', letterSpacing: '-0.03em',
                 fontFamily: 'var(--mono)',
               }}>{value}</div>
               <div style={{ fontSize: '12px', color: '#525252', marginTop: '2px' }}>
