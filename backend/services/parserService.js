@@ -107,43 +107,59 @@ ${file.content}
 --- SOURCE CODE END ---
 `;
 
-  const response = await aiClient.chat.completions.create({
-    model: 'gemini-2.5-flash',
-    messages: [
-      { role: 'system', content: SYSTEM_PROMPT },
-      { role: 'user', content: userMessage },
-    ],
-    // NOTE: response_format is intentionally omitted — Gemini's OpenAI-compatible
-    // endpoint does not reliably honour { type: 'json_object' } and may throw.
-    // The system prompt already enforces JSON-only output.
-    temperature: 0.1,
-  });
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY_MS = 3000;
 
-  let rawJson = response.choices[0].message.content;
+  let lastError;
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await aiClient.chat.completions.create({
+        model: 'gemini-2.5-flash',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: userMessage },
+        ],
+        temperature: 0.1,
+      });
 
-  // Strip any accidental markdown code fences the model may add
-  // e.g. ```json ... ``` or ``` ... ```
-  rawJson = rawJson
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/\s*```\s*$/, '')
-    .trim();
+      let rawJson = response.choices[0].message.content;
 
-  // Parse and validate — if model returns malformed JSON, catch it cleanly
-  let parsed;
-  try {
-    parsed = JSON.parse(rawJson);
-  } catch {
-    throw new Error(`AI returned malformed JSON for file: ${file.filename}`);
+      // Strip any accidental markdown code fences the model may add
+      rawJson = rawJson
+        .replace(/^```(?:json)?\s*/i, '')
+        .replace(/\s*```\s*$/, '')
+        .trim();
+
+      let parsed;
+      try {
+        parsed = JSON.parse(rawJson);
+      } catch {
+        throw new Error(`AI returned malformed JSON for file: ${file.filename}`);
+      }
+
+      return {
+        filename: file.filename,
+        extension: file.extension,
+        sizeKB: file.sizeKB,
+        documentation: parsed,
+        parsedAt: new Date().toISOString(),
+        model: 'gemini-2.5-flash',
+      };
+
+    } catch (error) {
+      lastError = error;
+      const status = error?.status || error?.response?.status;
+      // Retry only on 503 (overloaded) or 429 (rate limit)
+      if ((status === 503 || status === 429) && attempt < MAX_RETRIES) {
+        console.warn(`[PARSER] Attempt ${attempt} failed with ${status} — retrying in ${RETRY_DELAY_MS / 1000}s...`);
+        await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
+      } else {
+        throw error;
+      }
+    }
   }
 
-  return {
-    filename: file.filename,
-    extension: file.extension,
-    sizeKB: file.sizeKB,
-    documentation: parsed,
-    parsedAt: new Date().toISOString(),
-    model: 'gemini-2.5-flash',
-  };
+  throw lastError;
 };
 
 /**
