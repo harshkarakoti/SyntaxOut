@@ -83,10 +83,10 @@ export default function UploadZone({ onUploadComplete }) {
           <UploadCloud size={18} color={isDragging ? '#22d3ee' : '#475569'} />
         </div>
 
-        <p style={{ fontSize: '14px', fontWeight: 500, color: '#e8e8e8', marginBottom: '4px' }}>
+        <p style={{ fontSize: '15px', fontWeight: 500, color: '#e8e8e8', marginBottom: '4px' }}>
           {isDragging ? 'Release to add files' : 'Drop files here, or click to browse'}
         </p>
-        <p style={{ fontSize: '12px', color: '#525252' }}>
+        <p style={{ fontSize: '13px', color: '#525252' }}>
           Up to 10 files · 2 MB each
         </p>
 
@@ -132,11 +132,11 @@ export default function UploadZone({ onUploadComplete }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
                 <FileCode size={13} color="#22d3ee" style={{ flexShrink: 0 }} />
                 <span style={{
-                  fontSize: '13px', fontWeight: 500, color: '#e8e8e8',
+                  fontSize: '14px', fontWeight: 500, color: '#e8e8e8',
                   whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                   fontFamily: 'var(--mono)',
                 }}>{file.name}</span>
-                <span style={{ fontSize: '11px', color: '#525252', flexShrink: 0 }}>
+                <span style={{ fontSize: '12px', color: '#525252', flexShrink: 0 }}>
                   {(file.size / 1024).toFixed(1)} KB
                 </span>
               </div>

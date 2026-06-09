@@ -5,13 +5,13 @@ import { useState } from 'react';
 // Single-pass tokenizer — uses one regex with alternation so that once a
 // comment or string is matched, keywords/numbers can never nest inside it.
 const COLORS = {
-  comment:  '#4a5568',
-  string:   '#a0a0a0',
-  keyword:  '#6b7280',
-  type:     '#718096',
-  number:   '#718096',
-  fn:       '#cbd5e0',
-  plain:    '#6b7280',
+  comment:  '#64748b', // Slate 500
+  string:   '#a7f3d0', // Emerald 200 (bright, clean string style)
+  keyword:  '#22d3ee', // Cyan 400 (standout keywords)
+  type:     '#a7f3d0', // Emerald 200
+  number:   '#fb923c', // Orange 400
+  fn:       '#60a5fa', // Blue 400 (bright function names)
+  plain:    '#e2e8f0', // Slate 200 (highly legible default text)
 };
 
 const KW = 'const|let|var|function|async|await|return|export|import|from|class|extends|new|if|else|try|catch|throw|for|of|in|while|switch|case|break|default|typeof|instanceof|null|undefined|true|false|this|super|require|module|def|elif|except|with|as|pass|None|True|False|and|or|not|lambda|yield|global|del|assert|raise';
@@ -123,20 +123,20 @@ export default function CodeViewer({ filename, content }) {
               >
                 {/* Line number */}
                 <td style={{
-                  width: '44px', minWidth: '44px', maxWidth: '44px',
-                  paddingLeft: '10px', paddingRight: '10px',
+                  width: '48px', minWidth: '48px', maxWidth: '48px',
+                  paddingLeft: '10px', paddingRight: '12px',
                   textAlign: 'right', userSelect: 'none', verticalAlign: 'top',
-                  fontFamily: 'var(--mono)', fontSize: '12px',
-                  lineHeight: '20px', color: 'rgba(34,211,238,0.18)',
+                  fontFamily: 'var(--mono)', fontSize: '13px',
+                  lineHeight: '22px', color: 'rgba(34,211,238,0.22)',
                   borderRight: '1px solid #1a2030',
                 }}>
                   {i + 1}
                 </td>
                 {/* Code */}
                 <td style={{
-                  paddingLeft: '14px', paddingRight: '20px',
-                  fontFamily: 'var(--mono)', fontSize: '12.5px',
-                  lineHeight: '20px', color: '#606060',
+                  paddingLeft: '16px', paddingRight: '20px',
+                  fontFamily: 'var(--mono)', fontSize: '14px',
+                  lineHeight: '22px', color: '#cbd5e1',
                   whiteSpace: 'pre', verticalAlign: 'top',
                 }}>
                   <span dangerouslySetInnerHTML={{ __html: highlight(line) || '&nbsp;' }} />

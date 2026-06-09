@@ -73,24 +73,24 @@ export default function ProjectPage() {
 
   if (loading) return (
     <div style={{ height: '100vh', display: 'flex', alignItems: 'center',
-      justifyContent: 'center', color: '#525252', gap: '8px',
-      paddingTop: '52px', fontSize: '13px' }}>
-      <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
+      justifyContent: 'center', color: '#64748b', gap: '10px',
+      paddingTop: '60px', fontSize: '15px' }}>
+      <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
       Loading…
     </div>
   );
 
   if (error) return (
     <div style={{ height: '100vh', display: 'flex', alignItems: 'center',
-      justifyContent: 'center', color: '#c0392b', gap: '8px',
-      paddingTop: '52px', fontSize: '13px' }}>
-      <AlertCircle size={15} /> {error}
+      justifyContent: 'center', color: '#f87171', gap: '10px',
+      paddingTop: '60px', fontSize: '15px' }}>
+      <AlertCircle size={18} /> {error}
     </div>
   );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column',
-      height: '100vh', paddingTop: '52px', overflow: 'hidden' }}>
+      height: '100vh', paddingTop: '60px', overflow: 'hidden' }}>
 
       {/* Top bar */}
       <div style={{
@@ -130,13 +130,13 @@ export default function ProjectPage() {
 
           <div style={{ minWidth: 0 }}>
             <h1 style={{
-              fontSize: '13px', fontWeight: 600, color: '#e8e8e8',
+              fontSize: '16px', fontWeight: 600, color: '#e2e8f0',
               margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
               {project?.name}
             </h1>
             <p style={{
-              fontSize: '11px', color: '#525252', margin: 0, marginTop: '1px',
+              fontSize: '13px', color: '#475569', margin: 0, marginTop: '2px',
               fontFamily: 'var(--mono)',
             }}>
               {modules.length} file{modules.length !== 1 ? 's' : ''} ·{' '}
@@ -151,9 +151,9 @@ export default function ProjectPage() {
         <button
           onClick={exportJSON}
           className="btn-secondary"
-          style={{ fontSize: '12px', flexShrink: 0 }}
+          style={{ fontSize: '14px', flexShrink: 0 }}
         >
-          <Download size={12} /> Export JSON
+          <Download size={14} /> Export JSON
         </button>
       </div>
 
@@ -162,8 +162,8 @@ export default function ProjectPage() {
 
         {/* File sidebar */}
         <aside style={{
-          width: sidebarCollapsed ? '0px' : '144px',
-          padding: sidebarCollapsed ? '0' : '12px 8px',
+          width: sidebarCollapsed ? '0px' : '180px',
+          padding: sidebarCollapsed ? '0' : '16px 12px',
           overflowY: sidebarCollapsed ? 'hidden' : 'auto',
           overflowX: 'hidden',
           flexShrink: 0,
@@ -173,32 +173,32 @@ export default function ProjectPage() {
           opacity: sidebarCollapsed ? 0 : 1,
         }}>
           <p style={{
-            fontSize: '10px', fontWeight: 600, color: '#404040',
-            letterSpacing: '0.1em', marginBottom: '8px', paddingLeft: '6px',
+            fontSize: '11px', fontWeight: 600, color: '#64748b',
+            letterSpacing: '0.1em', marginBottom: '10px', paddingLeft: '8px',
             textTransform: 'uppercase', fontFamily: 'var(--mono)',
           }}>
             Files
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
             {modules.map((mod) => {
               const active = activeModule?._id === mod._id;
               return (
                 <button key={mod._id} onClick={() => setActiveModule(mod)} style={{
-                  width: '100%', textAlign: 'left', padding: '6px 8px',
+                  width: '100%', textAlign: 'left', padding: '8px 10px',
                   borderRadius: '6px',
                   border: '1px solid transparent',
                   background: active ? 'rgba(34,211,238,0.06)' : 'transparent',
                   borderColor: active ? 'rgba(34,211,238,0.15)' : 'transparent',
-                  color: active ? '#22d3ee' : '#475569',
-                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
-                  transition: 'all 0.12s', fontSize: '11px',
+                  color: active ? '#22d3ee' : '#64748b',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px',
+                  transition: 'all 0.12s', fontSize: '13px',
                   fontFamily: 'var(--mono)', whiteSpace: 'nowrap',
                   overflow: 'hidden',
                 }}
-                onMouseEnter={e => { if (!active) e.currentTarget.style.color = '#a0a0a0'; }}
-                onMouseLeave={e => { if (!active) e.currentTarget.style.color = '#525252'; }}
+                onMouseEnter={e => { if (!active) e.currentTarget.style.color = '#94a3b8'; }}
+                onMouseLeave={e => { if (!active) e.currentTarget.style.color = '#64748b'; }}
                 >
-                  <FileCode size={11} style={{ flexShrink: 0 }} />
+                  <FileCode size={13} style={{ flexShrink: 0 }} />
                   <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {mod.filename}
                   </span>
@@ -249,8 +249,8 @@ export default function ProjectPage() {
           </div>
         ) : (
           <div style={{ flex: 1, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', color: '#525252', gap: '8px', fontSize: '13px' }}>
-            <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} />
+            justifyContent: 'center', color: '#64748b', gap: '10px', fontSize: '15px' }}>
+            <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
             Loading module…
           </div>
         )}

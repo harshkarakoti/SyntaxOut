@@ -6,27 +6,27 @@ export default function HomePage() {
   const handleComplete = (projectId) => setTimeout(() => navigate(`/projects/${projectId}`), 600);
 
   return (
-    <main style={{ minHeight: '100vh', paddingTop: '100px', paddingBottom: '80px' }}>
-      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 20px' }}>
+    <main style={{ minHeight: '100vh', paddingTop: '110px', paddingBottom: '80px' }}>
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '0 24px' }}>
 
         {/* Heading block */}
         <div className="animate-slide-up" style={{ marginBottom: '40px' }}>
           <h1 style={{
-            fontSize: 'clamp(28px, 5vw, 42px)',
+            fontSize: 'clamp(32px, 5vw, 48px)',
             fontWeight: 600,
             letterSpacing: '-0.04em',
-            lineHeight: 1.15,
-            color: '#e8e8e8',
-            marginBottom: '14px',
+            lineHeight: 1.1,
+            color: '#e2e8f0',
+            marginBottom: '16px',
           }}>
             Turn code into<br />
             <span style={{ color: '#525252' }}>API documentation</span>
           </h1>
           <p style={{
-            fontSize: '14px',
-            color: '#525252',
-            lineHeight: 1.6,
-            maxWidth: '420px',
+            fontSize: '15px',
+            color: '#475569',
+            lineHeight: 1.65,
+            maxWidth: '480px',
           }}>
             Drop a source file. Get structured documentation — endpoints,
             functions, classes, and imports — in seconds.
@@ -54,11 +54,11 @@ export default function HomePage() {
           ].map(({ value, label }) => (
             <div key={label}>
               <div style={{
-                fontSize: '16px', fontWeight: 600,
+                fontSize: '18px', fontWeight: 600,
                 color: '#22d3ee', letterSpacing: '-0.03em',
                 fontFamily: 'var(--mono)',
               }}>{value}</div>
-              <div style={{ fontSize: '12px', color: '#525252', marginTop: '2px' }}>
+              <div style={{ fontSize: '13px', color: '#475569', marginTop: '3px' }}>
                 {label}
               </div>
             </div>

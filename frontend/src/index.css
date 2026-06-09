@@ -31,7 +31,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
@@ -67,8 +67,8 @@ body {
   background: var(--accent);
   color: #0c0f14;
   font-weight: 600;
-  font-size: 13px;
-  padding: 9px 18px;
+  font-size: 14px;
+  padding: 10px 20px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -88,8 +88,8 @@ body {
   background: transparent;
   color: var(--text-2);
   font-weight: 500;
-  font-size: 13px;
-  padding: 8px 14px;
+  font-size: 14px;
+  padding: 9px 16px;
   border-radius: 7px;
   border: 1px solid var(--border);
   cursor: pointer;

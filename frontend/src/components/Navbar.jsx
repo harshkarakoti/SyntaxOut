@@ -18,7 +18,7 @@ export default function Navbar() {
     }}>
       <div style={{
         maxWidth: '1320px', margin: '0 auto',
-        padding: '0 20px', height: '52px',
+        padding: '0 24px', height: '60px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
 
@@ -34,8 +34,8 @@ export default function Navbar() {
             <Braces size={14} color="#22d3ee" strokeWidth={2.5} />
           </div>
           <span style={{
-            fontWeight: 600, fontSize: '15px',
-            letterSpacing: '-0.03em', color: '#e8e8e8',
+            fontWeight: 600, fontSize: '16px',
+            letterSpacing: '-0.03em', color: '#e2e8f0',
           }}>
             SyntaxOut
           </span>
@@ -49,7 +49,7 @@ export default function Navbar() {
               <Link key={to} to={to} style={{
                 display: 'flex', alignItems: 'center', gap: '5px',
                 padding: '5px 12px', borderRadius: '6px', textDecoration: 'none',
-                fontSize: '13px', fontWeight: active ? 600 : 500,
+                fontSize: '14px', fontWeight: active ? 600 : 500,
                 color: active ? '#22d3ee' : '#475569',
                 background: active ? 'rgba(34,211,238,0.08)' : 'transparent',
                 transition: 'color 0.15s, background 0.15s',
