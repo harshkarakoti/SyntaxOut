@@ -113,13 +113,22 @@ ${file.content}
       { role: 'system', content: SYSTEM_PROMPT },
       { role: 'user', content: userMessage },
     ],
-    response_format: { type: 'json_object' }, // Deterministic JSON enforcement
-    temperature: 0.1, // Near-zero temperature = consistent, reliable output
+    // NOTE: response_format is intentionally omitted — Gemini's OpenAI-compatible
+    // endpoint does not reliably honour { type: 'json_object' } and may throw.
+    // The system prompt already enforces JSON-only output.
+    temperature: 0.1,
   });
 
-  const rawJson = response.choices[0].message.content;
+  let rawJson = response.choices[0].message.content;
 
-  // Parse and validate — if Gemini returns malformed JSON, catch it cleanly
+  // Strip any accidental markdown code fences the model may add
+  // e.g. ```json ... ``` or ``` ... ```
+  rawJson = rawJson
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```\s*$/, '')
+    .trim();
+
+  // Parse and validate — if model returns malformed JSON, catch it cleanly
   let parsed;
   try {
     parsed = JSON.parse(rawJson);
