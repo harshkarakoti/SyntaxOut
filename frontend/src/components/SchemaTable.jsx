@@ -8,7 +8,7 @@ const Section = ({ icon: Icon, title, count, children }) => {
   if (!count) return null;
   return (
     <div style={{
-      border: '1px solid #1f1f1f',
+      border: '1px solid #222a38',
       borderRadius: '8px',
       overflow: 'hidden',
       marginBottom: '8px',
@@ -18,11 +18,11 @@ const Section = ({ icon: Icon, title, count, children }) => {
         style={{
           width: '100%', display: 'flex', alignItems: 'center',
           justifyContent: 'space-between', padding: '9px 12px',
-          background: '#111', border: 'none',
+          background: '#131720', border: 'none',
           cursor: 'pointer', transition: 'background 0.12s',
         }}
-        onMouseEnter={e => e.currentTarget.style.background = '#161616'}
-        onMouseLeave={e => e.currentTarget.style.background = '#111'}
+        onMouseEnter={e => e.currentTarget.style.background = 'rgba(34,211,238,0.05)'}
+        onMouseLeave={e => e.currentTarget.style.background = '#131720'}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '7px',
           fontSize: '12px', fontWeight: 500, color: '#8899aa' }}>
@@ -40,7 +40,7 @@ const Section = ({ icon: Icon, title, count, children }) => {
           : <ChevronRight size={12} style={{ color: '#404040' }} />}
       </button>
       {open && (
-        <div style={{ borderTop: '1px solid #1a1a1a' }}>
+        <div style={{ borderTop: '1px solid #1a2030' }}>
           {children}
         </div>
       )}
@@ -77,8 +77,8 @@ export default function SchemaTable({ module }) {
       {/* Summary */}
       {doc.summary && (
         <div style={{
-          background: '#111',
-          border: '1px solid #1f1f1f',
+          background: '#131720',
+          border: '1px solid #222a38',
           borderRadius: '8px', padding: '12px 14px',
           marginBottom: '8px',
         }}>
@@ -97,7 +97,7 @@ export default function SchemaTable({ module }) {
               marginTop: '10px', display: 'inline-block',
               fontSize: '11px', fontFamily: 'var(--mono)',
               padding: '2px 7px', borderRadius: '4px',
-              background: '#161616', border: '1px solid #222', color: '#525252',
+              background: '#1a2030', border: '1px solid #222a38', color: '#475569',
             }}>{doc.language}</span>
           )}
         </div>
@@ -108,7 +108,7 @@ export default function SchemaTable({ module }) {
         {doc.endpoints?.map((ep, i) => (
           <div key={i} style={{
             padding: '10px 12px',
-            borderBottom: i < doc.endpoints.length - 1 ? '1px solid #1a1a1a' : 'none',
+            borderBottom: i < doc.endpoints.length - 1 ? '1px solid #1a2030' : 'none',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
               <Badge method={ep.method} />
@@ -148,7 +148,7 @@ export default function SchemaTable({ module }) {
         {doc.functions?.map((fn, i) => (
           <div key={i} style={{
             padding: '10px 12px',
-            borderBottom: i < doc.functions.length - 1 ? '1px solid #1a1a1a' : 'none',
+            borderBottom: i < doc.functions.length - 1 ? '1px solid #1a2030' : 'none',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
               <code style={{ fontSize: '12px', fontFamily: 'var(--mono)', color: '#e8e8e8' }}>
@@ -157,8 +157,8 @@ export default function SchemaTable({ module }) {
               {fn.isAsync && (
                 <span style={{
                   fontSize: '10px', padding: '1px 5px', borderRadius: '4px',
-                  background: '#1e1e1e', color: '#525252',
-                  border: '1px solid #2a2a2a', fontFamily: 'var(--mono)',
+                  background: '#1a2030', color: '#475569',
+                  border: '1px solid #222a38', fontFamily: 'var(--mono)',
                 }}>async</span>
               )}
             </div>
@@ -183,7 +183,7 @@ export default function SchemaTable({ module }) {
         {doc.classes?.map((cls, i) => (
           <div key={i} style={{
             padding: '10px 12px',
-            borderBottom: i < doc.classes.length - 1 ? '1px solid #1a1a1a' : 'none',
+            borderBottom: i < doc.classes.length - 1 ? '1px solid #1a2030' : 'none',
           }}>
             <code style={{ fontSize: '12px', fontFamily: 'var(--mono)', color: '#e8e8e8', fontWeight: 600 }}>
               {cls.name}
@@ -199,8 +199,8 @@ export default function SchemaTable({ module }) {
                 <span style={{
                   fontFamily: 'var(--mono)', fontSize: '10px', padding: '1px 4px',
                   borderRadius: '4px',
-                  color: m.access === 'private' ? '#404040' : '#606060',
-                  background: '#161616',
+                  color: m.access === 'private' ? '#333' : '#475569',
+                  background: '#1a2030',
                 }}>{m.access || 'pub'}</span>
                 <code style={{ color: '#a0a0a0', fontFamily: 'var(--mono)' }}>{m.name}()</code>
                 {m.description && (
@@ -217,7 +217,7 @@ export default function SchemaTable({ module }) {
         {doc.imports?.map((imp, i) => (
           <div key={i} style={{
             padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '10px',
-            borderBottom: i < doc.imports.length - 1 ? '1px solid #1a1a1a' : 'none',
+            borderBottom: i < doc.imports.length - 1 ? '1px solid #1a2030' : 'none',
           }}>
             <code style={{ fontSize: '11px', fontFamily: 'var(--mono)', color: '#a0a0a0' }}>
               {imp.module}
@@ -234,7 +234,7 @@ export default function SchemaTable({ module }) {
         {doc.constants?.map((c, i) => (
           <div key={i} style={{
             padding: '8px 12px',
-            borderBottom: i < doc.constants.length - 1 ? '1px solid #1a1a1a' : 'none',
+            borderBottom: i < doc.constants.length - 1 ? '1px solid #1a2030' : 'none',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
               <code style={{ fontSize: '11px', fontFamily: 'var(--mono)', color: '#e8e8e8' }}>
